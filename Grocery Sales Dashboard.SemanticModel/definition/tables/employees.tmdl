@@ -1,0 +1,104 @@
+table employees
+	lineageTag: 0f0d47a5-7748-4506-87ad-676ac72f2d16
+
+	measure 'Average Sales by an Employee' = SUM('Product Sales'[Total Cost])/DISTINCTCOUNT(employees[EmployeeID])
+		lineageTag: 7c5978fa-29c0-4f8a-9970-2539e459d86e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column EmployeeID
+		dataType: int64
+		formatString: 0
+		lineageTag: 001dedb1-845c-4ad9-bcf0-5ca715336fde
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstName
+		dataType: string
+		lineageTag: 65860500-0b63-495e-96aa-e8e754c7b64d
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		annotation SummarizationSetBy = Automatic
+
+	column MiddleInitial
+		dataType: string
+		lineageTag: 1358701f-346f-416d-9bb5-2063fb264b52
+		summarizeBy: none
+		sourceColumn: MiddleInitial
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastName
+		dataType: string
+		lineageTag: f8656915-0cce-45bf-8aa4-d398504b1bce
+		summarizeBy: none
+		sourceColumn: LastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column BirthDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b993e913-5445-41f5-8cf5-b49506098fc1
+		summarizeBy: none
+		sourceColumn: BirthDate
+
+		variation Variation
+			isDefault
+			relationship: e0d72bf8-92ee-4715-9a77-e3d98d45170f
+			defaultHierarchy: LocalDateTable_1afa7dd7-7e71-4c66-8b81-192755c84cc5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: e4a9847d-fbb5-4940-b154-873fcffa1963
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityID
+		dataType: int64
+		formatString: 0
+		lineageTag: d1669c40-0107-4cba-8901-12d96baad865
+		summarizeBy: count
+		sourceColumn: CityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column HireDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9ba20ed8-5222-4748-9e11-24dc81a9a964
+		summarizeBy: none
+		sourceColumn: HireDate
+
+		variation Variation
+			isDefault
+			relationship: 6059f914-5f44-4e3d-ae31-f049348ec3a2
+			defaultHierarchy: LocalDateTable_765a98ea-7637-48b2-9eea-0a7ddcbf71d5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Full Name' = CONCATENATE(CONCATENATE(CONCATENATE(CONCATENATE(employees[FirstName]," "),employees[MiddleInitial])," "),employees[LastName])
+		lineageTag: 6d62f714-a2d9-4fca-b701-a3646b4bb34d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition employees = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\NITHIS\OneDrive\Desktop\Grocery Sales Database\employees.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EmployeeID", Int64.Type}, {"FirstName", type text}, {"MiddleInitial", type text}, {"LastName", type text}, {"BirthDate", type datetime}, {"Gender", type text}, {"CityID", Int64.Type}, {"HireDate", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

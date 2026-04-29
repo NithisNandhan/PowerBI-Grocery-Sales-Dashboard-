@@ -1,0 +1,95 @@
+table sales
+	lineageTag: 719d3564-fd8a-465e-8368-e162134edde7
+
+	column SalesID
+		dataType: int64
+		formatString: 0
+		lineageTag: 9e1169d2-7d04-4fb9-97fd-019179444ed7
+		summarizeBy: count
+		sourceColumn: SalesID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesPersonID
+		dataType: int64
+		formatString: 0
+		lineageTag: 49913372-1e0c-41e3-b348-eff751322386
+		summarizeBy: none
+		sourceColumn: SalesPersonID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 63757b71-6222-47e8-9305-1b723155a035
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 19526e86-403d-4b0e-a3fa-db59fd5b1bed
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 3aaab808-b1a3-4e88-8c7b-8bd02211e91e
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: f2c168c6-f6be-4101-998a-7d24b047bff3
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5df395c5-2671-4750-a452-24e55528e773
+		summarizeBy: none
+		sourceColumn: SalesDate
+
+		variation Variation
+			isDefault
+			relationship: 06e9cd21-218c-4c23-abef-b2c0bb90c2ea
+			defaultHierarchy: LocalDateTable_2eb20fd2-0b81-406c-ac37-4c080c29f08e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransactionNumber
+		dataType: string
+		lineageTag: 23b8da94-245d-40d8-8ab1-94499c5227dc
+		summarizeBy: none
+		sourceColumn: TransactionNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	partition sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\NITHIS\OneDrive\Desktop\Grocery Sales Database\sales.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"SalesID", Int64.Type}, {"SalesPersonID", Int64.Type}, {"CustomerID", Int64.Type}, {"ProductID", Int64.Type}, {"Quantity", Int64.Type}, {"Discount", type number}, {"TotalPrice", Int64.Type}, {"SalesDate", type datetime}, {"TransactionNumber", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"TotalPrice"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,83 @@
+table customers
+	lineageTag: ea3f94d5-932f-4e07-89b0-f727d0c2957d
+
+	measure Unique_Customers = DISTINCTCOUNT('Product Sales'[CustomerID])
+		formatString: 0
+		lineageTag: a514074a-1476-4dc1-b045-8ef7cef76988
+
+	measure 'Average Purchase' = SUM('Product Sales'[Total Cost])/DISTINCTCOUNT(customers[CustomerID])
+		lineageTag: 198a243d-375f-4ff2-9937-f97b22796927
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 495bda19-d66c-4e92-8bdc-d0c3d15671a7
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstName
+		dataType: string
+		lineageTag: add6a188-6708-4fe5-a958-985f9704a21d
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		annotation SummarizationSetBy = Automatic
+
+	column MiddleInitial
+		dataType: string
+		lineageTag: 0caff33a-b575-4af7-91a4-7dab5ac25f4a
+		summarizeBy: none
+		sourceColumn: MiddleInitial
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastName
+		dataType: string
+		lineageTag: 1581740f-45ab-4545-9138-64ebc8480122
+		summarizeBy: none
+		sourceColumn: LastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityID
+		dataType: int64
+		formatString: 0
+		lineageTag: 1aacb443-177c-41ec-8d0f-70ddca1fed16
+		summarizeBy: none
+		sourceColumn: CityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Address
+		dataType: string
+		lineageTag: 0e308e8e-9311-429e-9379-d9149354f288
+		summarizeBy: none
+		sourceColumn: Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Full Name' = CONCATENATE(CONCATENATE(CONCATENATE(CONCATENATE(customers[FirstName]," "),customers[MiddleInitial])," "),customers[LastName])
+		dataType: string
+		lineageTag: c450ca85-dc3f-46f2-a04a-66ed532f61cc
+		summarizeBy: none
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	partition customers = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\NITHIS\OneDrive\Desktop\Grocery Sales Database\customers.csv"),[Delimiter=",", Columns=6, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CustomerID", Int64.Type}, {"FirstName", type text}, {"MiddleInitial", type text}, {"LastName", type text}, {"CityID", Int64.Type}, {"Address", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

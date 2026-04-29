@@ -1,0 +1,66 @@
+relationship e0d72bf8-92ee-4715-9a77-e3d98d45170f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: employees.BirthDate
+	toColumn: LocalDateTable_1afa7dd7-7e71-4c66-8b81-192755c84cc5.Date
+
+relationship 6059f914-5f44-4e3d-ae31-f049348ec3a2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: employees.HireDate
+	toColumn: LocalDateTable_765a98ea-7637-48b2-9eea-0a7ddcbf71d5.Date
+
+relationship AutoDetected_4999c9be-3cbb-4db2-86ad-8581d94baed6
+	isActive: false
+	fromColumn: employees.CityID
+	toColumn: cities.CityID
+
+relationship AutoDetected_90052e07-1558-41c1-a789-7b35a2a27034
+	fromColumn: customers.CityID
+	toColumn: cities.CityID
+
+relationship AutoDetected_c88a99d4-d2bf-4d78-8fec-2c802799095e
+	fromColumn: cities.CountryID
+	toColumn: countries.CountryID
+
+relationship 06e9cd21-218c-4c23-abef-b2c0bb90c2ea
+	joinOnDateBehavior: datePartOnly
+	fromColumn: sales.SalesDate
+	toColumn: LocalDateTable_2eb20fd2-0b81-406c-ac37-4c080c29f08e.Date
+
+relationship AutoDetected_10dbcf2f-a8da-4987-ae0a-3af0bedb1032
+	fromColumn: sales.CustomerID
+	toColumn: customers.CustomerID
+
+relationship d538a5d9-03be-411e-b65a-a956a0d03764
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'products (2)'.ModifyDate
+	toColumn: LocalDateTable_9979f26d-ffbd-4501-9f21-605dbeaf3742.Date
+
+relationship AutoDetected_252049a6-33a7-406a-a547-5eac1ab8ef89
+	fromColumn: 'products (2)'.CategoryID
+	toColumn: categories.CategoryID
+
+relationship AutoDetected_868f707b-125c-4ede-91c8-e79354ec59f8
+	fromColumn: sales.ProductID
+	toColumn: 'products (2)'.ProductID
+
+relationship 7c00687b-a756-0ff7-ea5d-5370707d93ea
+	fromColumn: sales.SalesPersonID
+	toColumn: employees.EmployeeID
+
+relationship 9789d160-bdcc-41e6-8301-523e77d9803b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Product Sales'.SalesDate
+	toColumn: LocalDateTable_e3509df1-c8d4-473b-8dba-20c824c48fbc.Date
+
+relationship AutoDetected_c2c245c6-e735-43f0-8149-f7b1586f932e
+	fromColumn: 'Product Sales'.CustomerID
+	toColumn: customers.CustomerID
+
+relationship AutoDetected_7b368951-a8a6-4ec0-8707-38e3b3fb3239
+	fromColumn: 'Product Sales'.ProductID
+	toColumn: 'products (2)'.ProductID
+
+relationship 63703389-a7fa-1f7e-8844-af776ea064ff
+	fromColumn: 'Product Sales'.SalesPersonID
+	toColumn: employees.EmployeeID
+

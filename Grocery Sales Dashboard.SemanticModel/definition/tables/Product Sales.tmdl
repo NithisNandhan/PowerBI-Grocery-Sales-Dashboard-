@@ -1,0 +1,151 @@
+table 'Product Sales'
+	lineageTag: 41e5c095-7136-4a66-965b-3c54eb03f26a
+
+	measure Average_Transaction_Value = SUM('Product Sales'[Total Cost])/COUNT(sales[SalesID])
+		lineageTag: add7c2d6-f733-456d-a460-28f58ca3c857
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Price' = SUM('Product Sales'[Total Cost])/SUM('Product Sales'[Quantity])
+		lineageTag: f7b03d75-3b16-4f45-a22c-5798e6c1209c
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3af6d000-f3c7-4dea-a16b-1ddb89e2788d
+		summarizeBy: count
+		sourceColumn: SalesID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesPersonID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4180bc47-d034-4b81-a4cf-a94b535391a6
+		summarizeBy: none
+		sourceColumn: SalesPersonID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: d879e64c-87c9-4b27-98fb-ede750dab6c5
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f27d614-02c0-4321-9671-9f2584e4ca1c
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a665c06-19e9-4b06-9c06-5e7022ed7daf
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: 171fecf9-32a4-4c44-ac30-80201df88d6a
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2bd81244-9b32-421b-97cb-ffb9877068b0
+		summarizeBy: none
+		sourceColumn: SalesDate
+
+		variation Variation
+			isDefault
+			relationship: 9789d160-bdcc-41e6-8301-523e77d9803b
+			defaultHierarchy: LocalDateTable_e3509df1-c8d4-473b-8dba-20c824c48fbc.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransactionNumber
+		dataType: string
+		lineageTag: ebc4fa71-e746-4e60-a6c1-aeadebcaa946
+		summarizeBy: none
+		sourceColumn: TransactionNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Price
+		dataType: double
+		lineageTag: 113b1677-b90f-4b6c-b479-4c85dc6adf3a
+		summarizeBy: sum
+		sourceColumn: Price
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Cost'
+		dataType: double
+		lineageTag: 4c4dbefa-82b8-4242-898c-4ea1dcc817d0
+		summarizeBy: sum
+		sourceColumn: Total Cost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Product Sales' = m
+		mode: import
+		source =
+				let
+				    Source = Table.NestedJoin(sales, {"ProductID"}, #"products (2)", {"ProductID"}, "products (2)", JoinKind.LeftOuter),
+				    #"Expanded products (2)" = Table.ExpandTableColumn(Source, "products (2)", {"Price"}, {"Price"}),
+				    #"Added Custom" = Table.AddColumn(#"Expanded products (2)", "Total Cost", each [Quantity] * [Price] * (1 - [Discount] / 100)),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Custom",{{"Total Cost", type number}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

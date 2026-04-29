@@ -1,0 +1,40 @@
+table countries
+	lineageTag: 46a8885f-4f9b-4f3f-bed9-93260d1a6a0d
+
+	column CountryID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6aa4c51a-b0d7-4fbb-937b-9ed2dad69959
+		summarizeBy: none
+		sourceColumn: CountryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryName
+		dataType: string
+		lineageTag: b15b4aaf-60b0-4db6-a640-c16f46a6204b
+		summarizeBy: none
+		sourceColumn: CountryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: 781b4294-6614-433a-812c-3d950b705f55
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	partition countries = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\NITHIS\OneDrive\Desktop\Grocery Sales Database\countries.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CountryID", Int64.Type}, {"CountryName", type text}, {"CountryCode", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

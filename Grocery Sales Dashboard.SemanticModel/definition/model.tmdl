@@ -1,0 +1,46 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+/// Errors in queries that were loaded on 11-06-2025 03:35:57 PM.
+queryGroup 'Query Errors - 11-06-2025 03:35:57 PM'
+
+	annotation PBI_QueryGroupOrder = 0
+
+/// Errors in queries that were loaded on 11-06-2025 03:36:58 PM.
+queryGroup 'Query Errors - 11-06-2025 03:36:58 PM'
+
+	annotation PBI_QueryGroupOrder = 1
+
+/// Errors in queries that were loaded on 11-06-2025 03:41:02 PM.
+queryGroup 'Query Errors - 11-06-2025 03:41:02 PM'
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation PBI_QueryOrder = ["products","employees","customers","countries","cities","categories","sales","Errors in products","Errors in products (2)","Errors in products (3)","products (2)","Product Sales"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DateTableTemplate_5e5216c1-59fb-4790-8afa-0baf52536a16
+ref table employees
+ref table LocalDateTable_1afa7dd7-7e71-4c66-8b81-192755c84cc5
+ref table LocalDateTable_765a98ea-7637-48b2-9eea-0a7ddcbf71d5
+ref table customers
+ref table countries
+ref table cities
+ref table categories
+ref table sales
+ref table LocalDateTable_2eb20fd2-0b81-406c-ac37-4c080c29f08e
+ref table 'products (2)'
+ref table LocalDateTable_9979f26d-ffbd-4501-9f21-605dbeaf3742
+ref table 'Product Sales'
+ref table LocalDateTable_e3509df1-c8d4-473b-8dba-20c824c48fbc
+
+ref cultureInfo en-IN
+

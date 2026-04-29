@@ -1,0 +1,98 @@
+table 'products (2)'
+	lineageTag: 667146a4-c8ff-45cf-88c8-122ccec8f480
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 653564bc-686b-43b8-9fce-2c5807e180de
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 7a2144be-859e-4f28-af1e-7f78d96532a7
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Price
+		dataType: double
+		lineageTag: 9920fb10-9dfb-4ae1-85aa-78204217f8f0
+		summarizeBy: sum
+		sourceColumn: Price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CategoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b1d6c8c-4b89-4a97-acee-da168917b7be
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Class
+		dataType: string
+		lineageTag: 792d15fc-5e15-437d-aad6-46bafa503c31
+		summarizeBy: none
+		sourceColumn: Class
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifyDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ed169174-a405-4941-8400-4e09c6a407a4
+		summarizeBy: none
+		sourceColumn: ModifyDate
+
+		variation Variation
+			isDefault
+			relationship: d538a5d9-03be-411e-b65a-a956a0d03764
+			defaultHierarchy: LocalDateTable_9979f26d-ffbd-4501-9f21-605dbeaf3742.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Resistant
+		dataType: string
+		lineageTag: 207ac1ce-7da3-4bb4-b06d-bed4bc7641fb
+		summarizeBy: none
+		sourceColumn: Resistant
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsAllergic
+		dataType: string
+		lineageTag: 25e7d38e-8a4d-481b-9c2c-c07721737e85
+		summarizeBy: none
+		sourceColumn: IsAllergic
+
+		annotation SummarizationSetBy = Automatic
+
+	column VitalityDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f74989d-9c39-47b0-9bc8-2dd4d654ae5b
+		summarizeBy: sum
+		sourceColumn: VitalityDays
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'products (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\NITHIS\OneDrive\Desktop\Grocery Sales Database\products.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductID", Int64.Type}, {"ProductName", type text}, {"Price", type number}, {"CategoryID", Int64.Type}, {"Class", type text}, {"ModifyDate", type datetime}, {"Resistant", type text}, {"IsAllergic", type text}, {"VitalityDays", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

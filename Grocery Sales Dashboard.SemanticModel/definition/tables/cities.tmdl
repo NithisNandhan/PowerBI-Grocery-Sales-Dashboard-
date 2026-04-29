@@ -1,0 +1,50 @@
+table cities
+	lineageTag: dad35a9e-4bdc-4c13-b7c6-8fc84d6c857e
+
+	column CityID
+		dataType: int64
+		formatString: 0
+		lineageTag: 21c18cb0-5de1-4c3a-9b49-09860d602da7
+		summarizeBy: none
+		sourceColumn: CityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityName
+		dataType: string
+		lineageTag: 08df328a-ba37-43d5-b78b-fcd36cc8590d
+		summarizeBy: none
+		sourceColumn: CityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Zipcode
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e25dfc6-5e7f-4d46-b839-a90ae85bcbd8
+		summarizeBy: sum
+		sourceColumn: Zipcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryID
+		dataType: int64
+		formatString: 0
+		lineageTag: 65dfd9d2-44c9-4f5a-9b6d-16266b9d7478
+		summarizeBy: none
+		sourceColumn: CountryID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition cities = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\NITHIS\OneDrive\Desktop\Grocery Sales Database\cities.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CityID", Int64.Type}, {"CityName", type text}, {"Zipcode", Int64.Type}, {"CountryID", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
