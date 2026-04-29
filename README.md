@@ -12,7 +12,7 @@ This repository contains a Power BI dashboard project developed using Power BI D
 [View Full Report](assets/report.pdf)
 
 ## Dashboard Preview
-![Dashboard](assets/dashboard.png)
+![Dashboard](assets/HomePage.png)
 
 ## Tools Used
 - Power BI
